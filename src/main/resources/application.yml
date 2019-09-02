@@ -1,0 +1,37 @@
+server:
+  port: 18161
+
+spring:
+  security:
+    user:
+      name: ${erueka.user:admin}
+      password: ${erueka.password:admin001}
+
+eureka:
+  instance:
+    ## 是否显示真实ip
+    prefer-ip-address: true
+    hostname: eureka-server
+
+  client:
+    ## 是否从注册中心获取数据，默认值为true
+    fetch-registry: false
+    ## 是否把自己注册到注册中心，默认值为true
+    register-with-eureka: false
+    service-url:
+      defaultZone: "http://${spring.security.user.name}:${spring.security.user.password}@${eureka.instance.hostname:localhost}:${server.port}/eureka/"
+
+      ## 无加密访问 取消方式：（spring.security 配置项 + pom 文件中 spring-boot-starter-security 依赖加以去除即可）
+#      defaultZone: "http://localhost:${server.port}/eureka/"
+
+  server:
+    ## 设置清理无效节点的时间间隔，单位为毫秒，默认为60 * 1000
+    eviction-interval-timer-in-ms: 30000
+    ## 是否启用注册中心的自我保护模式 Eureka 会统计15分钟之内心跳失败的比例低于85%将会触发保护机制，不剔除服务提供者，如果关闭服务注册中心将不可用的实例正确剔除
+    enable-self-preservation: false
+    ## 在Eureka服务器获取不到集群里对等服务器上的实例时，需要等待的时间，单位为毫秒，默认为1000 * 60 * 5
+    wait-time-in-ms-when-sync-empty: 0
+
+
+## [备注]: 以上配置可以参考：  https://my.oschina.net/langxSpirit/blog/1821256
+
